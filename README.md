@@ -4,16 +4,16 @@ Example used for persistent volume encryption keys handed over to Kubernetes etc
 
 ### step 1
 ```
-kubectl apply -f storageclass.yaml
+kubectl apply -f storageclass-encrypted.yaml
 ```
 
 ### step 2
 ```
-kubectl apply -f nginx.yaml
+kubectl apply -f nginx-encrypted.yaml
 ```
 
 ### step 3 
-Check for the keys:
+Check for the keys being used by StorageOS:
 ```
 kubectl get secrets -n web-wpv
 NAME                                                        TYPE                                  DATA   AGE
