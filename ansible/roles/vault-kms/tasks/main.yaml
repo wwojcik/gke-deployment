@@ -1,0 +1,38 @@
+# ---
+- name: Ensure directories exist.
+  file: "path=/opt/vault-kms/ state=directory mode=0775"
+- name: Template a vault kms config /etc/kubernetes/vault-kms-provider.yaml
+  ansible.builtin.template:
+    src: vault.yaml.j2
+    dest: /opt/vault-kms/config.yaml
+    owner: root
+    group: root
+    mode: '0644'
+  when:
+    - inventory_hostname == groups['kube_control_plane'][0]
+  tags:
+    - vault-kms
+- name: Ensure directories exist.
+  file: "path=/etc/kubernetes/manifests/ state=directory mode=0775"
+- name: Template a vault kms deployment /etc/kubernetes/vault-kms-provider.yaml
+  template:
+    src: kms.yaml.j2
+    dest: /etc/kubernetes/manifests/vault-kms-provider.yaml
+    owner: root
+    group: root
+    mode: '0644'
+  when:
+    - inventory_hostname == groups['kube_control_plane'][0]
+  tags:
+    - vault-kms
+- name: copy encryption config
+  ansible.builtin.copy:
+    src: encryption-config.yaml
+    dest: "/opt/vault-kms/encryption_config.yaml"
+    owner: root
+    group: root
+    mode: '0644'
+  when:
+    - inventory_hostname == groups['kube_control_plane'][0]
+  tags:
+    - vault-kms

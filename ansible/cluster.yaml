@@ -1,0 +1,10 @@
+- name: Include kubespray tasks
+  include: kubespray/cluster.yml
+  vars:
+    kube_kubeadm_apiserver_extra_args:
+        encryption-provider-config: /opt/vault-kms/encryption_config.yaml
+    apiserver_extra_volumes:
+      - name: vaultkms
+        hostPath: /opt/vault-kms
+        mountPath: /opt/vault-kms
+        readOnly: true
